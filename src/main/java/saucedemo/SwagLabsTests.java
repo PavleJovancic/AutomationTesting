@@ -43,7 +43,7 @@ public class SwagLabsTests  {
         webStorage.getLocalStorage().clear();
     }
 
-    @Test (priority = 1)
+    @Test (priority = 1, retryAnalyzer = SwagLabsRetry.class)
     public void verifyErrorIsDisplayedWhenUsernameIsMissing(){
         driver.findElement(By.id("login-button")).click();
         wait
@@ -53,7 +53,7 @@ public class SwagLabsTests  {
 
 
     }
-    @Test (priority = 2)
+    @Test (priority = 2, retryAnalyzer = SwagLabsRetry.class)
     public void verifyErrorIsDisplayedWhenPasswordIsMissing(){
         userName = "standard_user";
 
@@ -67,7 +67,7 @@ public class SwagLabsTests  {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.error h3")))
                 .getText().equals("Epic sadface: Password is required");
     }
-    @Test (priority = 3)
+    @Test (priority = 3, retryAnalyzer = SwagLabsRetry.class)
     public void verifyErrorIsDisplayedWhenCredentialsAreWrong(){
         userName = "standard_user";
         password = "invalidpassword";
@@ -85,7 +85,7 @@ public class SwagLabsTests  {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.error h3")))
                 .getText().equals("Epic sadface: Username and password do not match any user in this service");
     }
-    @Test (priority = 4)
+    @Test (priority = 4, retryAnalyzer = SwagLabsRetry.class)
     public void verifyErrorIsDisplayedWhenUserIsLocked(){
         userName = "locked_out_use";
         password = "secret_sauce";
@@ -103,7 +103,7 @@ public class SwagLabsTests  {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.error h3")))
                 .getText().equals("Epic sadface: Sorry, this user has been locked out");
     }
-    @Test (priority = 5)
+    @Test (priority = 5, retryAnalyzer = SwagLabsRetry.class)
     public void verifySuccessfulLogin(){
         userName = "standard_user";
         password = "secret_sauce";
@@ -120,6 +120,10 @@ public class SwagLabsTests  {
                 .until(ExpectedConditions.urlContains("/inventory.html"));
 
         driver.findElement(By.id("react-burger-menu-btn")).click();
+        wait
+                .withMessage("Menu should be open")
+                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.bm-menu")));
+
         Assert.assertTrue(driver.findElement(By.id("logout_sidebar_link")).isDisplayed()
                 , "Logout button should be present");
         driver.findElement(By.id("logout_sidebar_link")).click();
@@ -128,7 +132,7 @@ public class SwagLabsTests  {
                 .until(ExpectedConditions.urlToBe("https://www.saucedemo.com/"));
 
     }
-    @Test (priority = 6)
+    @Test (priority = 6, retryAnalyzer = SwagLabsRetry.class)
     public void addingProductsToCart(){
         userName = "standard_user";
         password = "secret_sauce";
@@ -153,7 +157,7 @@ public class SwagLabsTests  {
         Assert.assertEquals(driver.findElement(By.cssSelector("span.shopping_cart_badge"))
                 .getText(), "1", "Number of products in cart should be 1");
     }
-    @Test (priority = 7)
+    @Test (priority = 7, retryAnalyzer = SwagLabsRetry.class)
     public void viewingProductDetails(){
         userName = "standard_user";
         password = "secret_sauce";
@@ -182,7 +186,7 @@ public class SwagLabsTests  {
                 , "Add to cart button should be present");
 
     }
-    @Test (priority = 8)
+    @Test (priority = 8, retryAnalyzer = SwagLabsRetry.class)
     public void removingProductsFromCart(){
         userName = "standard_user";
         password = "secret_sauce";
@@ -217,7 +221,7 @@ public class SwagLabsTests  {
                 .until(ExpectedConditions.invisibilityOfElementLocated(By.id("item_4_title_link")));
 
     }
-    @Test (priority = 9)
+    @Test (priority = 9, retryAnalyzer = SwagLabsRetry.class)
     public void productCheckout(){
         userName = "standard_user";
         password = "secret_sauce";
